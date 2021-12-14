@@ -108,7 +108,7 @@
             var img;
             for(var i=0; i < rdata.data.length; i++){
                var date = rdata.data[i][0].slice(0,10);
-               var name = rdata.data[i][0];
+               var name = rdata.data[i][1];
                var div =  document.createElement('div');
                div.className = 'event-container';
                div.textContent = name;
