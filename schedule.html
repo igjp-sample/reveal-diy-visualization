@@ -138,23 +138,6 @@
             RPBridgeUtils.notifyExtensionIsReady();
          });
 
-         const target = document.getElementById("schedule-container");
-         var timeoutID;
-         const resizeObserver = new ResizeObserver(entries => {
-            console.log("resize");
-            for (const entry of entries) {
-                  var rq = function() {
-                     getRevealData();
-                  }
-                  clearTimeout(timeoutID);
-                  timeoutID = setTimeout(rq, 1000);
-                  revealHeight = entry.contentRect.height;
-                  revealWidth = entry.contentRect.width;
-            }
-         });
-         resizeObserver.observe(target);
-
-
          $(function(){
 
             var currentDate = new Date();
