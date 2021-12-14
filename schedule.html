@@ -113,7 +113,7 @@
                div.className = 'event-container';
                div.textContent = name;
                var content = document.querySelectorAll('[date="'+ date +'"]');
-               content.appendChild(div);
+               $(content).append($(div));
             }
          }
          return null;
