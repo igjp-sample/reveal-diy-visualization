@@ -71,7 +71,6 @@
                   </div>
                   <div class="day-container">
                      <span><i></i> (Thu</span>
-                     <div>ddddddddddddddd</div>
                   </div>
                   <div class="day-container">
                      <span><i></i> (Fri</span>
@@ -115,14 +114,12 @@
                var excerpt = rdata.data[i][2];
                var img = rdata.data[i][3];
 
-               console.log(img);
-
                var div =  document.createElement('div');
                div.className = 'event-container';
                if (img != null) {
                   var img_element = document.createElement('img');
                   img_element.src = img;
-                  $(div).append($(img));
+                  $(div).append($(img_element));
                } else {
                   var b =  document.createElement('b');
                   b.textContent = name;
