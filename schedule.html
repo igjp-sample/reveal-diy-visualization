@@ -7,13 +7,12 @@
       <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
       <scripttype="text/javascript" src="html2canvas.min.js?version=08a7bc6"></script>
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-
    </head>
    <body>
       <style>
          .page-container {
             position: relative;
+            font-family: sans-serif;
          }
          .page-content {
             position: absolute;
@@ -22,6 +21,7 @@
          }
          .week-container {
             display: flex;
+            padding-bottom: 1em;
          }
          .day-container {
             border: 1px solid;
@@ -100,6 +100,7 @@
       var rdata;
 
       function getRevealData(){
+         console.log(rdata);
          if(rdata !== null){
             var addressColumn;
             var dataColumn;
@@ -140,41 +141,10 @@
          return null;
       }
 
-      function getAreaData(){
-         var areasData = [];
-         var codeNumber = 1;
-
-         var revealData = getRevealData();
-
-         // 都道府県名でマッチング
-         if(revealData !== null){
-
-            var captraMax = 1;
-            var captraMin = 0.1;
-            var captraBet = captraMax - captraMin;
-            var captraEach = captraBet / revealData.length;
-            var currentCaptra = captraMax;
-
-            revealData.sort(function(a,b) {
-               if(a.value > b.value) return -1;
-               if(a.value < b.value) return 1;
-               return 0;
-            });
-
-            revealData.forEach(rv => {
-
-               console.log(rv)
-
-            });
-
-         }
-
-         return areasData;
-      }
-
          window.RPBridgeListener = {
             dataReady: function (tabularData) {
                rdata = tabularData;
+               getRevealData();
                RPBridgeListener.generateImage();
             },
             generateImage: function () {
@@ -196,7 +166,7 @@
             console.log("resize");
             for (const entry of entries) {
                   var rq = function() {
-
+                     getRevealData();
                   }
                   clearTimeout(timeoutID);
                   timeoutID = setTimeout(rq, 1000);
@@ -204,7 +174,7 @@
                   revealWidth = entry.contentRect.width;
             }
          });
-         //resizeObserver.observe(target);
+         resizeObserver.observe(target);
 
 
          $(function(){
