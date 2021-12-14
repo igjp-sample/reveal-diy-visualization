@@ -1,0 +1,231 @@
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <script src="./js/jquery.min.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="rplus_bridge_utils.js?version=08a7bc6"></script>
+      <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+      <scripttype="text/javascript" src="html2canvas.min.js?version=08a7bc6"></script>
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+   </head>
+   <body>
+      <style>
+         .page-container {
+            position: relative;
+         }
+         .page-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+         }
+         .week-container {
+            display: flex;
+         }
+         .day-container {
+            border: 1px solid;
+            flex: 1 1 auto;
+            padding: 1em;
+            margin: 0.25em;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+         }
+         .day-container span {
+            position: absolute;
+            font-size: 12px;
+            top: 5px;
+            left: 5px;
+         }
+         .day-container img {
+            width: auto;
+            max-height: 45px;
+         }
+         </style>
+
+         <div class="page-container">
+            <div id="schedule-container" >
+               <strong>Last Week</strong>
+               <div class="week-container last-week">
+                  <div class="day-container disabled">
+                     <span><i></i> (Mon</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Tue</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Wed</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Thu</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Fri</span>
+                     <div class="event-container">
+                        <img src="http://www.dzhintl.com/image/DZH-Logo.png">
+                     </div>
+                     <div class="event-container">
+                        <img src="http://www.toho-industrial.co.jp/cont/wp-content/themes/toho_industrial_theme/img/common/h-logo.png">
+                     </div>
+                  </div>
+               </div>
+               <strong>This Week</strong>
+               <div class="week-container this-week">
+                  <div class="day-container disabled">
+                     <span><i></i> (Mon</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Tue</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Wed</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Thu</span>
+                  </div>
+                  <div class="day-container">
+                     <span><i></i> (Fri</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+    <script type="text/javascript">
+
+    var revealHeight;
+    var revealWidth;
+
+      var rdata;
+
+      function getRevealData(){
+         if(rdata !== null){
+            var addressColumn;
+            var dataColumn;
+            var addressColumnNo;
+            var dataColumnNo;
+            for(var i=0; i < rdata.metadata.columns.length; i++){
+               var column = rdata.metadata.columns[i];
+               // ラベルで選択されたフィールドを取得
+               if(column.type === 0){
+                  addressColumn = column;
+                  addressColumnNo = i;
+               }
+               else if(column.type === 1){
+                  dataColumn = column;
+                  dataColumnNo = i;
+               }
+            }
+
+            // データ取得
+            var returnValue = [];
+            for (var i = 0; i < rdata.data.length; i++) {
+               var rowData = rdata.data[i];
+
+               // 対象の都道府県
+               var addressValue = rowData[addressColumnNo];
+               // 対象の表示値
+               var cellValue = rowData[dataColumnNo];
+
+
+               returnValue.push(
+                  { address: addressValue, value: cellValue }
+               )
+            }
+
+
+            return returnValue;
+         }
+         return null;
+      }
+
+      function getAreaData(){
+         var areasData = [];
+         var codeNumber = 1;
+
+         var revealData = getRevealData();
+
+         // 都道府県名でマッチング
+         if(revealData !== null){
+
+            var captraMax = 1;
+            var captraMin = 0.1;
+            var captraBet = captraMax - captraMin;
+            var captraEach = captraBet / revealData.length;
+            var currentCaptra = captraMax;
+
+            revealData.sort(function(a,b) {
+               if(a.value > b.value) return -1;
+               if(a.value < b.value) return 1;
+               return 0;
+            });
+
+            revealData.forEach(rv => {
+
+               console.log(rv)
+
+            });
+
+         }
+
+         return areasData;
+      }
+
+         window.RPBridgeListener = {
+            dataReady: function (tabularData) {
+               rdata = tabularData;
+               RPBridgeListener.generateImage();
+            },
+            generateImage: function () {
+               html2canvas(document.body, {
+                  onrendered: function (canvas) {
+                      var imageUrl = canvas.toDataURL('image/png', 1.0);
+                      RPBridgeUtils.sendImage(imageUrl);
+                  }
+              });
+            }
+         };
+         $(function () {
+            RPBridgeUtils.notifyExtensionIsReady();
+         });
+
+         const target = document.getElementById("schedule-container");
+         var timeoutID;
+         const resizeObserver = new ResizeObserver(entries => {
+            console.log("resize");
+            for (const entry of entries) {
+                  var rq = function() {
+
+                  }
+                  clearTimeout(timeoutID);
+                  timeoutID = setTimeout(rq, 1000);
+                  revealHeight = entry.contentRect.height;
+                  revealWidth = entry.contentRect.width;
+            }
+         });
+         //resizeObserver.observe(target);
+
+
+         $(function(){
+
+            var currentDate = new Date();
+            var this_monday = currentDate.getDate() - currentDate.getDay() + 1;
+            var last_monday = this_monday - 7;
+
+            for (let index = 0; index < 5; index++) {
+               var fullDateC = new Date();
+               var fullDateP = new Date();
+               fullDateC.setDate(this_monday + index);
+               fullDateP.setDate(last_monday + index);
+               var outputC = (fullDateC.getMonth() + 1) + '/' + fullDateC.getDate();
+               var outputP = (fullDateP.getMonth() + 1) + '/' + fullDateP.getDate();
+               $('.last-week > div').eq(index).find('i').text(outputP);
+               $('.this-week > div').eq(index).find('i').text(outputC);
+            }
+
+         });
+
+   </script>
+   </body>
+</html>
