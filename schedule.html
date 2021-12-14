@@ -33,6 +33,7 @@
             display: flex;
             flex-direction: column;
             text-align: center;
+            justify-content: center;
          }
          .day-container span {
             position: absolute;
@@ -46,6 +47,12 @@
          }
          .event-container {
             margin: .25em 0;
+         }
+         .event-container b {
+            background-color: #888;
+            display: inline-block;
+            padding: .25em .5em;
+            color: #fff;
          }
          </style>
 
@@ -67,9 +74,6 @@
                   </div>
                   <div class="day-container">
                      <span><i></i> (Fri</span>
-                     <div class="event-container">
-                        <img src="http://www.dzhintl.com/image/DZH-Logo.png">
-                     </div>
                   </div>
                </div>
                <strong>This Week</strong>
@@ -103,15 +107,24 @@
       function getRevealData(){
          console.log(rdata);
          if(rdata !== null){
-            var name;
-            var excerpt;
-            var img;
+
             for(var i=0; i < rdata.data.length; i++){
                var date = rdata.data[i][0].slice(0,10);
                var name = rdata.data[i][1];
+               var excerpt = rdata.data[i][2];
+               var img = rdata.data[i][3];
+
                var div =  document.createElement('div');
                div.className = 'event-container';
-               div.textContent = name;
+               if (img != null) {
+                  var img_element = document.createElement('img');
+                  img_element.src = img;
+                  div.appendChild(img);
+               } else {
+                  var b =  document.createElement('b');
+                  b.textContent = name;
+                  div.appendChild(b);
+               }
                var content = document.querySelectorAll('[date="'+ date +'"]');
                $(content).append($(div));
             }
