@@ -152,7 +152,9 @@
          });
 
          $(function(){
-
+            
+            var testDate = new Date().getTimezoneOffset();
+            console.log(testDate);
             var currentDate = new Date();
             var this_monday = currentDate.getDate() - currentDate.getDay() + 1;
             var last_monday = this_monday - 7;
