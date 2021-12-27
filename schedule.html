@@ -184,8 +184,8 @@
                fullDateP.setDate(last_monday + index);
                var outputC = (fullDateC.getMonth() + 1) + '/' + fullDateC.getDate();
                var outputP = (fullDateP.getMonth() + 1) + '/' + fullDateP.getDate();
-               $('.last-week > div').eq(index).attr('date', fullDateP.toISOLocal().slice(0,10)).find('i').text(outputP);
-               $('.this-week > div').eq(index).attr('date', fullDateC.toISOLocal().slice(0,10)).find('i').text(outputC);
+               $('.last-week > div').eq(index).attr('date', toISOLocal(fullDateP).slice(0,10)).find('i').text(outputP);
+               $('.this-week > div').eq(index).attr('date', toISOLocal(fullDateC).slice(0,10)).find('i').text(outputC);
             }
 
          });
