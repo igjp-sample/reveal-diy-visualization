@@ -155,13 +155,13 @@
             
             var testDate = new Date().getTimezoneOffset();
             console.log(testDate);
-            var currentDate = new Date();
+            var currentDate = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
             var this_monday = currentDate.getDate() - currentDate.getDay() + 1;
             var last_monday = this_monday - 7;
 
             for (let index = 0; index < 5; index++) {
-               var fullDateC = new Date();
-               var fullDateP = new Date();
+               var fullDateC = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+               var fullDateP = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
                fullDateC.setDate(this_monday + index);
                fullDateP.setDate(last_monday + index);
                var outputC = (fullDateC.getMonth() + 1) + '/' + fullDateC.getDate();
